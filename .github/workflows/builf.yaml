@@ -64,7 +64,7 @@ jobs:
     if: ${{ always() }} 
     steps:
       - name: Send mail
-        uses: https://${{ secrets.ACTIONS_TOKEN }}:@gitea.diyao.me:8888/actions/action-send-mail.git@v3
+        uses: dawidd6/action-send-mail@@v3
         with:
           server_address: smtp.163.com
           server_port: 25
