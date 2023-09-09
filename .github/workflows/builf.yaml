@@ -1,0 +1,77 @@
+name: topsde-v1.0
+run-name: 构建 topsde-v1.0 by @${{ github.actor }}
+on: [push]
+
+env:
+  BASE_DIR: /home/ngos/workspace/2.6
+  PKG_URL: ${{ github.server_url }}/api/packages/topsec/generic
+  MVN_VERS: 3.8.6
+  JAVA_VERS: 8u144-linux-x64
+jobs:
+  pre-compile:
+    runs-on: yy
+    steps:
+      - name: 恢复topsec编译机初始状态
+        run: |
+          echo "恢复编译虚拟机至初始状态"
+          exit -1          
+      - id: finish
+        run: |
+          echo 'result=true' >> $GITHUB_OUTPUT          
+    outputs:
+      result: ${{ steps.finish.outputs.result }}  
+  
+  compile:
+    runs-on: yy
+    needs: [pre-compile]
+    if: ${{ always() && needs.pre-compile.outputs.result == 'true' }} 
+    steps:
+      - name: 测试
+        run: |
+          echo "测试"          
+      - id: finish
+        run: |
+          echo 'result=true' >> $GITHUB_OUTPUT          
+    outputs:
+      result: ${{ steps.finish.outputs.result }}  
+
+  build:
+    runs-on: yy
+    needs: [compile]
+    if: ${{ always() && needs.compile.outputs.result == 'true' }} 
+    steps:
+      - name: 测试
+        run: |
+          echo "测试"          
+      - id: finish
+        run: |
+          echo 'result=true' >> $GITHUB_OUTPUT          
+    outputs:
+      result: ${{ steps.finish.outputs.result }}  
+
+  post-compile:
+    runs-on: yy
+    needs: [pre-compile, compile, build]
+    if: ${{ always() && needs.pre-compile.outputs.result == 'true' && needs.build.outputs.result != 'true' }} 
+    steps:
+      - name: 测试
+        run: |
+          echo "测试kkkk"          
+        
+  email:
+    runs-on: yy
+    needs: [pre-compile, compile, build, post-compile]
+    if: ${{ always() }} 
+    steps:
+      - name: Send mail
+        uses: https://${{ secrets.ACTIONS_TOKEN }}:@gitea.diyao.me:8888/actions/action-send-mail.git@v3
+        with:
+          server_address: smtp.163.com
+          server_port: 25
+          username: yaodi_cauc@163.com
+          password: NPALCSQNNHLRCBKI
+          subject: Github Actions job result
+          to: cauc.peter@gmail.com
+          from: yaodi_cauc@163.com
+          body: Build job of kkkkkoooooooooooooo00000000000000000
+          
