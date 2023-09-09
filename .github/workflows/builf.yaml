@@ -14,7 +14,6 @@ jobs:
       - name: 恢复topsec编译机初始状态
         run: |
           echo "恢复编译虚拟机至初始状态"
-          exit -1          
       - id: finish
         run: |
           echo 'result=true' >> $GITHUB_OUTPUT          
@@ -28,7 +27,8 @@ jobs:
     steps:
       - name: 测试
         run: |
-          echo "测试"          
+          echo "测试"            
+          exit -1          
       - id: finish
         run: |
           echo 'result=true' >> $GITHUB_OUTPUT          
