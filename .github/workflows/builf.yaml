@@ -1,6 +1,9 @@
 name: topsde-v1.0
 run-name: 构建 topsde-v1.0 by @${{ github.actor }}
 on: [push]
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: false
 
 env:
   BASE_DIR: /home/ngos/workspace/2.6
