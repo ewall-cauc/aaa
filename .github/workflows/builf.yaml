@@ -7,9 +7,10 @@ env:
   PKG_URL: ${{ github.server_url }}/api/packages/topsec/generic
   MVN_VERS: 3.8.6
   JAVA_VERS: 8u144-linux-x64
+
 jobs:
   pre-compile:
-    runs-on: default
+    runs-on: 1
     steps:
       - name: 恢复topsec编译机初始状态
         run: |
@@ -21,14 +22,15 @@ jobs:
       result: ${{ steps.finish.outputs.result }}  
   
   compile:
-    runs-on: default
+    runs-on: 2
     needs: [pre-compile]
     if: ${{ always() && needs.pre-compile.outputs.result == 'true' }} 
     steps:
-      - name: 测试
+      - name: 下载代码
         run: |
-          echo "测试"            
-          exit -1          
+          echo "下载代码"
+          sleep 300
+
       - id: finish
         run: |
           echo 'result=true' >> $GITHUB_OUTPUT          
@@ -36,13 +38,14 @@ jobs:
       result: ${{ steps.finish.outputs.result }}  
 
   build:
-    runs-on: default
+    runs-on: 2
     needs: [compile]
     if: ${{ always() && needs.compile.outputs.result == 'true' }} 
     steps:
-      - name: 测试
+      - name: 编译代码
         run: |
-          echo "测试"          
+          echo "编译代码"  
+          sleep 600        
       - id: finish
         run: |
           echo 'result=true' >> $GITHUB_OUTPUT          
@@ -50,16 +53,16 @@ jobs:
       result: ${{ steps.finish.outputs.result }}  
 
   post-compile:
-    runs-on: default
+    runs-on: 1
     needs: [pre-compile, compile, build]
     if: ${{ always() && needs.pre-compile.outputs.result == 'true' && needs.build.outputs.result != 'true' }} 
     steps:
-      - name: 测试
+      - name: 现场保护
         run: |
-          echo "测试kkkk"          
+          echo "现场保护"          
         
   email:
-    runs-on: default
+    runs-on: 1
     needs: [pre-compile, compile, build, post-compile]
     if: ${{ always() }} 
     steps:
