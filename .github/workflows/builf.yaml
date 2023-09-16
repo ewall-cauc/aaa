@@ -76,5 +76,5 @@ jobs:
           subject: Github Actions job result
           to: cauc.peter@gmail.com
           from: yaodi_cauc@163.com
-          body: Build job of kkkkkoooooooooooooo00000000000000000
+          body: Build job of test
           
